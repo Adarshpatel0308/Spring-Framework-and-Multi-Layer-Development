@@ -2,14 +2,17 @@ package com.springpayroll.SpringPayrollApp.model;
 
 
 import jakarta.persistence.*;
+import lombok.AllArgsConstructor;
 import lombok.Data;
+import lombok.NoArgsConstructor;
 
 @Entity
-@Data  //Using Lambok for getters and setters
+@Data
+@NoArgsConstructor
+@AllArgsConstructor//Using Lambok for getters and setters
 @Table(name = "employees")
 public class Employee {
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
     private String name;
     private double salary;

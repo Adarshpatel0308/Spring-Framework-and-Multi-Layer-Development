@@ -1,62 +1,70 @@
 package com.springpayroll.SpringPayrollApp.controller;
 
-
-import com.springpayroll.SpringPayrollApp.dto.EmployeePayrollDTO;
+import com.springpayroll.SpringPayrollApp.dto.EmployeeResponseDTO;
 import com.springpayroll.SpringPayrollApp.model.Employee;
+import com.springpayroll.SpringPayrollApp.service.EmployeeServiceForList;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import java.util.List;
 import org.springframework.web.bind.annotation.*;
-import com.springpayroll.SpringPayrollApp.service.EmployeeServiceForList;
 
-    @RestController
-    @RequestMapping("/employee")
-    public class EmployeeControllerForList {
+import java.util.List;
 
-        // POST endpoint to add an employee
-        @PostMapping("/add")
-        public String addEmployee(@RequestBody EmployeePayrollDTO employeePayrollDTO) {
-            // Convert DTO to Model
-            Employee employee = new Employee();
-            employee.setName(employeePayrollDTO.getName());
-            employee.setSalary(employeePayrollDTO.getSalary());
+@RestController
+@RequestMapping("/employee")
+@Slf4j // This annotation is used for apply logging
+public class EmployeeControllerForList {
 
-            // Save to database (for now, just print)
-            System.out.println("Employee added: " + employee);
+    @Autowired
+    private EmployeeServiceForList employeePayrollService;
 
-            return "Employee added successfully!";
-        }
+    // POST endpoint to add an employee
+    @PostMapping("/add")
+    public String addEmployee(@RequestBody EmployeeResponseDTO employeeResponseDTO) {
+        // Convert DTO to Model
+        Employee employee = new Employee();
+        employee.setName(employeeResponseDTO.getName());
+        employee.setSalary(employeeResponseDTO.getSalary());
 
-        // GET endpoint to fetch an employee
-        @GetMapping("/get")
-        public EmployeePayrollDTO getEmployee() {
-            // Simulate fetching data from the database
-            EmployeePayrollDTO employeeDTO = new EmployeePayrollDTO();
-            employeeDTO.setName("John Doe");
-            employeeDTO.setSalary(50000.0);
+        // Log the employee addition instead of printing to the console
+        log.info("Employee added: {}", employee);
 
-            return employeeDTO; // Automatically converted to JSON
-        }
-
-
-        @Autowired
-        private EmployeeServiceForList employeePayrollService;
-
-        // POST endpoint to add an employee
-        @PostMapping("/add2")
-        public ResponseEntity<String> addEmployee2(@RequestBody EmployeePayrollDTO employeePayrollDTO) {
-            String response = employeePayrollService.addEmployee(employeePayrollDTO);
-            return new ResponseEntity<>(response, HttpStatus.CREATED); // HTTP 201 status
-        }
-
-        // GET endpoint to fetch all employees
-        @GetMapping("/get2")
-        public ResponseEntity<List<EmployeePayrollDTO>> getEmployees() {
-            List<EmployeePayrollDTO> employees = employeePayrollService.getEmployees();
-            return new ResponseEntity<>(employees, HttpStatus.OK); // HTTP 200 status
-        }
+        return "Employee added successfully!";
     }
 
+    // GET endpoint to fetch an employee
+    @GetMapping("/get")
+    public EmployeeResponseDTO getEmployee() {
+        // Simulate fetching data from the database
+        EmployeeResponseDTO employeeDTO = new EmployeeResponseDTO();
+        employeeDTO.setName("John Doe");
+        employeeDTO.setSalary(50000.0);
 
-//In UC3 we have to connect this with the DATABASE that we are already done.....in UC2
+        log.info("Fetched employee: {}", employeeDTO);
+
+        return employeeDTO;
+    }
+
+    // POST endpoint to add an employee
+    @PostMapping("/add2")
+    public ResponseEntity<String> addEmployee2(@RequestBody EmployeeResponseDTO employeeResponseDTO) {
+        log.info("Received request to add employee: {}", employeeResponseDTO);
+
+        String response = employeePayrollService.addEmployee(employeeResponseDTO);
+        log.info("Employee added successfully: {}", employeeResponseDTO);
+
+        return new ResponseEntity<>(response, HttpStatus.CREATED);
+    }
+
+    // GET endpoint to fetch all employees
+    @GetMapping("/get2")
+    public ResponseEntity<List<EmployeeResponseDTO>> getEmployees() {
+        log.info("Fetching all employees...");
+
+        List<EmployeeResponseDTO> employees = employeePayrollService.getEmployees();
+        log.info("Fetched {} employees.", employees.size());
+
+        return new ResponseEntity<>(employees, HttpStatus.OK);
+    }
+}
