@@ -69,7 +69,13 @@
             <artifactId>lombok</artifactId>
             <scope>provided</scope>
         </dependency>
-    </dependencies>
+
+			<!-- Spring Boot Starter Logging (it includes SLF4J and Logback) -->
+			<dependency>
+				<groupId>org.springframework.boot</groupId>
+				<artifactId>spring-boot-starter-logging</artifactId>
+			</dependency>
+		</dependencies>
 
 	<build>
 		<plugins>
