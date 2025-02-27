@@ -1,7 +1,8 @@
-package com.bridgelabz.EmployeePayrollApp.controller;
+package com.springpayroll.SpringPayrollApp.controller;
 
-import com.bridgelabz.EmployeePayrollApp.employee.Employee;
-import com.bridgelabz.EmployeePayrollApp.model.EmployeeService;
+
+import com.springpayroll.SpringPayrollApp.model.Employee;
+import com.springpayroll.SpringPayrollApp.service.EmployeeService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -46,6 +47,6 @@ public class EmployeeController {
         return employeeService.deleteEmployee(id) ? ResponseEntity.status(HttpStatus.NO_CONTENT).build()
                 : ResponseEntity.status(HttpStatus.NOT_FOUND).build();
     }
-    
+
     //In the UC2 we are connect the Project to the DATABASE........
 }

@@ -1,10 +1,11 @@
-package com.bridgelabz.EmployeePayrollApp.employee;
+package com.springpayroll.SpringPayrollApp.model;
+
 
 import jakarta.persistence.*;
 import lombok.Data;
 
 @Entity
-@Data
+@Data  //Using Lambok for getters and setters
 @Table(name = "employees")
 public class Employee {
     @Id
@@ -13,3 +14,4 @@ public class Employee {
     private String name;
     private double salary;
 }
+
