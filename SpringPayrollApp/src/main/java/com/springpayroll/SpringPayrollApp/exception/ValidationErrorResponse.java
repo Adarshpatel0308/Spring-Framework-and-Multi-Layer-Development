@@ -1,7 +1,10 @@
 package com.springpayroll.SpringPayrollApp.exception;
 
+import lombok.Data;
+
 import java.util.List;
 
+@Data
 public class ValidationErrorResponse {
     private int status;
     private String message;
@@ -36,8 +39,8 @@ public class ValidationErrorResponse {
     public void setErrors(List<FieldErrorDetail> errors) {
         this.errors = errors;
     }
-
-    // Field error details class
+@Data
+// Field error details class
     public static class FieldErrorDetail {
         private String field;
         private String message;

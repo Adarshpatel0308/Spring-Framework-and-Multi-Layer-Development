@@ -1,10 +1,12 @@
 package com.springpayroll.SpringPayrollApp.service;
 
+import com.springpayroll.SpringPayrollApp.exception.EmployeeNotFoundException;
 import com.springpayroll.SpringPayrollApp.model.Employee;
 import com.springpayroll.SpringPayrollApp.repository.EmployeeRepository;
-import lombok.extern.slf4j.Slf4j;  // Import SLF4J annotation
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+
 import java.util.List;
 import java.util.Optional;
 
@@ -22,15 +24,17 @@ public class EmployeeService {
         return employees;
     }
 
-    public Optional<Employee> getEmployeeById(Long id) {
+    public Employee getEmployeeById(Long id) {
         log.info("Fetching employee with id: {}", id);
         Optional<Employee> employee = employeeRepository.findById(id);
         if (employee.isPresent()) {
             log.info("Employee with id {} found.", id);
+            return employee.get();
         } else {
             log.warn("Employee with id {} not found.", id);
+            // Throwing custom exception when employee is not found
+            throw new EmployeeNotFoundException("Employee with id " + id + " not found.");
         }
-        return employee;
     }
 
     public Employee createEmployee(Employee employee) {
@@ -52,7 +56,8 @@ public class EmployeeService {
             return updatedEmployee;
         } else {
             log.warn("Employee with id {} not found for update.", id);
-            return null;
+            // Throwing custom exception when employee is not found
+            throw new EmployeeNotFoundException("Employee with id " + id + " not found for update.");
         }
     }
 
@@ -64,7 +69,8 @@ public class EmployeeService {
             return true;
         } else {
             log.warn("Employee with id {} not found for deletion.", id);
-            return false;
+            // Throwing custom exception when employee is not found
+            throw new EmployeeNotFoundException("Employee with id " + id + " not found for deletion.");
         }
     }
 }
