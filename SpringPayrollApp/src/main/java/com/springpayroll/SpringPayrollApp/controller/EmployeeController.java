@@ -29,6 +29,19 @@ public class EmployeeController {
         }
     }
 
+    @PostMapping
+    public ResponseEntity<Employee> createEmployee(@RequestBody Employee employee) {
+        try {
+            log.info("Creating new employee: {}", employee);
+            Employee createdEmployee = employeeService.createEmployee(employee);
+            return ResponseEntity.status(HttpStatus.CREATED).body(createdEmployee);
+        } catch (Exception ex) {
+            log.error("Error creating employee: {}", ex.getMessage());
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
+        }
+    }
+
+
     @PutMapping("/{id}")
     public ResponseEntity<Employee> updateEmployee(@PathVariable Long id, @RequestBody Employee employee) {
         try {

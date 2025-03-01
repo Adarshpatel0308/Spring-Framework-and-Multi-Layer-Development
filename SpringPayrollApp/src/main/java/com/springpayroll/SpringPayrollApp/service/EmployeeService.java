@@ -51,15 +51,20 @@ public class EmployeeService {
             Employee existingEmployee = employee.get();
             existingEmployee.setName(employeeDetails.getName());
             existingEmployee.setSalary(employeeDetails.getSalary());
+            existingEmployee.setGender(employeeDetails.getGender());  // Set gender
+            existingEmployee.setStartDate(employeeDetails.getStartDate());  // Set start date
+            existingEmployee.setNote(employeeDetails.getNote());  // Set note
+            existingEmployee.setProfilePic(employeeDetails.getProfilePic());  // Set profile pic
+            existingEmployee.setDepartment(employeeDetails.getDepartment());  // Set department
             Employee updatedEmployee = employeeRepository.save(existingEmployee);
             log.info("Successfully updated employee with id: {}", id);
             return updatedEmployee;
         } else {
             log.warn("Employee with id {} not found for update.", id);
-            // Throwing custom exception when employee is not found
             throw new EmployeeNotFoundException("Employee with id " + id + " not found for update.");
         }
     }
+
 
     public boolean deleteEmployee(Long id) {
         log.info("Attempting to delete employee with id: {}", id);
