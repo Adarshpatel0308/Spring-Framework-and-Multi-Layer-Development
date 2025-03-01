@@ -1,5 +1,6 @@
 package com.springpayroll.SpringPayrollApp.service;
 
+import com.springpayroll.SpringPayrollApp.dto.EmployeeRequestDTO;
 import com.springpayroll.SpringPayrollApp.exception.EmployeeNotFoundException;
 import com.springpayroll.SpringPayrollApp.model.Employee;
 import com.springpayroll.SpringPayrollApp.repository.EmployeeRepository;
@@ -11,7 +12,7 @@ import java.util.List;
 import java.util.Optional;
 
 @Service
-@Slf4j
+@Slf4j  // Logging added here
 public class EmployeeService {
 
     @Autowired
@@ -32,31 +33,25 @@ public class EmployeeService {
             return employee.get();
         } else {
             log.warn("Employee with id {} not found.", id);
-            // Throwing custom exception when employee is not found
             throw new EmployeeNotFoundException("Employee with id " + id + " not found.");
         }
     }
 
-    public Employee createEmployee(Employee employee) {
-        log.info("Creating new employee: {}", employee);
+    public Employee createEmployee(EmployeeRequestDTO employeeDTO) {
+        log.info("Creating new employee with details: {}", employeeDTO);
+        Employee employee = mapToEntity(employeeDTO);
         Employee createdEmployee = employeeRepository.save(employee);
         log.info("Successfully created employee with id: {}", createdEmployee.getId());
         return createdEmployee;
     }
 
-    public Employee updateEmployee(Long id, Employee employeeDetails) {
+    public Employee updateEmployee(Long id, EmployeeRequestDTO employeeDTO) {
         log.info("Updating employee with id: {}", id);
         Optional<Employee> employee = employeeRepository.findById(id);
         if (employee.isPresent()) {
-            Employee existingEmployee = employee.get();
-            existingEmployee.setName(employeeDetails.getName());
-            existingEmployee.setSalary(employeeDetails.getSalary());
-            existingEmployee.setGender(employeeDetails.getGender());  // Set gender
-            existingEmployee.setStartDate(employeeDetails.getStartDate());  // Set start date
-            existingEmployee.setNote(employeeDetails.getNote());  // Set note
-            existingEmployee.setProfilePic(employeeDetails.getProfilePic());  // Set profile pic
-            existingEmployee.setDepartment(employeeDetails.getDepartment());  // Set department
-            Employee updatedEmployee = employeeRepository.save(existingEmployee);
+            Employee updatedEmployee = mapToEntity(employeeDTO);
+            updatedEmployee.setId(id); // Ensure the ID is not overwritten
+            updatedEmployee = employeeRepository.save(updatedEmployee);
             log.info("Successfully updated employee with id: {}", id);
             return updatedEmployee;
         } else {
@@ -64,7 +59,6 @@ public class EmployeeService {
             throw new EmployeeNotFoundException("Employee with id " + id + " not found for update.");
         }
     }
-
 
     public boolean deleteEmployee(Long id) {
         log.info("Attempting to delete employee with id: {}", id);
@@ -74,8 +68,20 @@ public class EmployeeService {
             return true;
         } else {
             log.warn("Employee with id {} not found for deletion.", id);
-            // Throwing custom exception when employee is not found
             throw new EmployeeNotFoundException("Employee with id " + id + " not found for deletion.");
         }
+    }
+
+    private Employee mapToEntity(EmployeeRequestDTO dto) {
+        Employee employee = new Employee();
+        employee.setId(dto.getId());
+        employee.setName(dto.getName());
+        employee.setSalary(dto.getSalary());
+        employee.setGender(dto.getGender());
+        employee.setStartDate(dto.getStartDate());
+        employee.setNote(dto.getNote());
+        employee.setProfilePic(dto.getProfilePic());
+        employee.setDepartment(dto.getDepartment());
+        return employee;
     }
 }
