@@ -72,6 +72,14 @@ public class EmployeeService {
         }
     }
 
+    // Method to retrieve employees in the Sales department
+    public List<Employee> getEmployeesBySalesDepartment() {
+        log.info("Fetching employees in the Sales department.");
+        List<Employee> employees = employeeRepository.findEmployeesBySalesDepartment();
+        log.info("Successfully retrieved {} employees from the Sales department.", employees.size());
+        return employees;
+    }
+
     private Employee mapToEntity(EmployeeRequestDTO dto) {
         Employee employee = new Employee();
         employee.setId(dto.getId());
@@ -86,4 +94,4 @@ public class EmployeeService {
     }
 }
 //In the UC4 of Section-5 of Employee Payroll the database is already installed
-//In the UC5 of Section-5 of Employee Payroll the rest API's are already created 
+//In the UC5 of Section-5 of Employee Payroll the rest API's are already created

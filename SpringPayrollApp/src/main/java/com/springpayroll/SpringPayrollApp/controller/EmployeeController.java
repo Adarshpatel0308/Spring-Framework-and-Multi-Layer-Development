@@ -11,6 +11,8 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.List;
+
 @RestController
 @RequestMapping("/employees")
 @Slf4j  // Logging added here
@@ -29,6 +31,18 @@ public class EmployeeController {
             // Exception will be handled by GlobalExceptionHandler
             throw ex;
         }
+    }
+
+    // API endpoint to fetch employees in the Sales department
+    @GetMapping("/sales")
+    public ResponseEntity<List<Employee>> getEmployeesInSalesDepartment() {
+        log.info("Received request to fetch employees from the Sales department.");
+        List<Employee> employees = employeeService.getEmployeesBySalesDepartment();
+        if (employees.isEmpty()) {
+            log.info("No employees found in the Sales department.");
+            return ResponseEntity.noContent().build();
+        }
+        return ResponseEntity.ok(employees);
     }
 
     @PostMapping
